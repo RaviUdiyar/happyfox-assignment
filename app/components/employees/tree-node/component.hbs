@@ -1,7 +1,9 @@
 <div
   class="employee-tree-node mx-2
     {{if (gt @model.children.length 0) 'employee-tree-children'}}
-    {{if @isRootNode 'root--node'}}"
+    {{if @isRootNode 'root--node'}}
+    cursor-pointer
+    "
   data-employee-id={{@model.id}}
   {{on "dragstart" (fn this.onDragStart @model)}}
   {{on "dragend" (fn this.onDragEnd @model)}}
