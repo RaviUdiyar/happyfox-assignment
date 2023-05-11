@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.employee-card {
+  display: flex;
+  width: 15em;
+}
+
+.employee-card-image {
+  width: 5em;
+  height: 4em;
+  margin-right: 1em;
+}
+
+.employee-tree-branch {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.employee-tree-node .employee-tree-branch {
+  padding-left: 5em;
+}
+
+.employee-tree-node {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  line-height: 1.5em;
+  list-style: none;
+  position: relative;
+}
+
+.employee-tree-line {
+  height: 2em;
+  width: 1px;
+  background-color: #333;
+}
+
+
+.employee-tree-children {
+  display: flex;
+}
+
+.employee-tree-node .employee-tree-highlight {
+  background-color: #f2f9fc;
+  color: #333;
+  cursor: pointer;
+}
+
+.employee-tree-node .employee-tree-chosen {
+  font-weight: bold;
+}

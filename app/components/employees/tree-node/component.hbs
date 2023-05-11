@@ -1,0 +1,15 @@
+<div
+  class="employee-tree-node mx-2
+    {{if (gt @model.children.length 0) 'employee-tree-children'}}
+    {{if @isRootNode 'root--node'}}"
+  data-employee-id={{@model.id}}
+  {{on "dragstart" (fn this.onDragStart @model)}}
+  {{on "dragend" (fn this.onDragEnd @model)}}
+  {{on "dragover" this.onDragOver}}
+  {{on "drop" (fn this.onDrop @model)}}
+>
+  <Employees::Card
+    @employee={{@model}}
+    @onDragOver={{fn this.onDragOver @model}}
+  />
+</div>

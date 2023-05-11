@@ -1,0 +1,9 @@
+<ul class="employee-tree-branch">
+  {{#each @model as |child|}}
+    <Employees::TreeChildren
+      @model={{child}}
+      @isRootNode={{@isRootNode}}
+      @saveTask={{@saveTask}}
+    />
+  {{/each}}
+</ul>

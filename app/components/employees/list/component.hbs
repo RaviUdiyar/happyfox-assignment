@@ -1,0 +1,7 @@
+<div class="employee-list">
+  <ul>
+    {{#each (sort-by "name" @employees) as |employee|}}
+      <Employees::ListItem @employee={{employee}} />
+    {{/each}}
+  </ul>
+</div>

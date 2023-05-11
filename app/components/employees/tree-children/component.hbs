@@ -1,0 +1,21 @@
+<li class="employee-tree-node {{if @isRootNode 'root--node'}}">
+  {{#if @model.manager}}
+    <div class="employee-tree-line"></div>
+  {{/if}}
+  <Employees::TreeNode
+    @model={{@model}}
+    @isRootNode={{@isRootNode}}
+    @saveTask={{@saveTask}}
+  />
+  {{#if @model.children}}
+    {{#if (gt @model.children.length 1)}}
+      <div class="employee-tree-line"></div>
+    {{/if}}
+    <div class="{{if (gt @model.children.length 1) 'border-t-2'}}">
+      <Employees::TreeBranch
+        @model={{@model.children}}
+        @saveTask={{@saveTask}}
+      />
+    </div>
+  {{/if}}
+</li>

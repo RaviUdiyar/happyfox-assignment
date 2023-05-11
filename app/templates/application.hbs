@@ -1,0 +1,13 @@
+{{page-title "HappyfoxAssignment"}}
+
+<div class="flex">
+  <SideBar
+    @employees={{this.model}}
+  />
+
+  <Employees::Tree
+    @employees={{this.model}}
+  />
+</div>
+
+{{outlet}}
