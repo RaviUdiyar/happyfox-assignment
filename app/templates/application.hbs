@@ -2,11 +2,15 @@
 
 <div class="flex">
   <SideBar
-    @employees={{this.model}}
+    @employees={{this.filteredEmployees}}
+    @filterEmployees={{this.filterEmployees}}
+    @filterEmployeesOnSearchTerm={{this.filterEmployeesOnSearchTerm}}
+    @filterEmployeesOnTeam={{this.filterEmployeesOnTeam}}
+    @allTeams={{this.allTeams}}
   />
 
   <Employees::Tree
-    @employees={{this.model}}
+    @employeeTree={{this.employeeTree}}
   />
 </div>
 

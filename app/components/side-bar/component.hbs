@@ -5,21 +5,21 @@
     class="search border border-grey p-2 mb-2"
     placeholder="Search"
     value={{this.searchTerm}}
-    {{on "input" this.filterEmployeesOnSearchTerm}}
+    {{on "input" @filterEmployeesOnSearchTerm}}
   />
   <select
     aria-label="filter employees"
     value={{this.selectedTeam}}
     class="border border-grey p-2 mb-2 mt-2"
-    {{on "change" this.filterEmployeesOnTeam}}
+    {{on "change" (pipe (pick "target.value") @filterEmployeesOnTeam)}}
   >
     <option value="">All</option>
-    {{#each this.teams as |team|}}
+    {{#each @allTeams as |team|}}
       <option value={{@team}} >{{team}}</option>
     {{/each}}
   </select>
 
   <Employees::List
-    @employees={{this.filteredEmployees}}
+    @employees={{@employees}}
   />
 </div>
