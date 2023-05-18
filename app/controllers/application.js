@@ -5,8 +5,12 @@ import { action, set } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
 
 export default class ApplicationController extends Controller {
+  @service
+  store;
+
   @tracked
   employees = [];
 
@@ -20,9 +24,16 @@ export default class ApplicationController extends Controller {
     return this.model.map((employee) => employee.team).uniq();
   }
 
+  @task
+  *saveEmployeeTask(model) {
+    yield model.save();
+    let employees = yield this.store.findAll('employee');
+    this.employeeTree = this.buildEmployeeTree(employees);
+  }
+
   @action
-  applyFilter(employee) {
-    let searchTerm = this.searchTerm.toLowerCase();
+  applyFilter(employee, searchTerm) {
+    searchTerm = searchTerm.toLowerCase();
     return (
       employee.name?.toLowerCase().includes(searchTerm) ||
       employee.designation?.toLowerCase().includes(searchTerm) ||
@@ -32,21 +43,29 @@ export default class ApplicationController extends Controller {
 
   @action
   filterEmployeesOnSearchTerm(value) {
-    if (isBlank(value)) return;
-
-    this.filteredEmployees = this.model.filter(this.applyFilter);
+    this.resetHighlight();
+    if (isBlank(value)) {
+      this.filteredEmployees = this.model;
+    } else {
+      this.filteredEmployees = this.model.filter((employee) =>
+        this.applyFilter(employee, value)
+      );
+      this.highlightFiltered();
+    }
   }
 
   @action
   filterEmployeesOnTeam(value) {
-    if (value === '') {
+    this.resetHighlight();
+    if (value === '' || value === 'all') {
       this.filteredEmployees = this.model;
     } else {
       this.filteredEmployees = this.model.filter((employee) => {
         return employee.team === value;
       });
+      this.highlightFiltered();
     }
-    this.employeeTree = this.buildEmployeeTree(this.filteredEmployees);
+    // this.employeeTree = this.buildEmployeeTree(this.filteredEmployees);
   }
 
   @action
@@ -77,10 +96,17 @@ export default class ApplicationController extends Controller {
     return roots;
   }
 
-  @task
-  *saveEmployeeTask(model) {
-    yield model.save();
-    let employees = yield this.store.findAll('employee');
-    this.employeeTree = this.buildEmployeeTree(employees);
+  @action
+  resetHighlight() {
+    this.model.forEach((employee) => {
+      set(employee, 'isHighlighted', false);
+    });
+  }
+
+  @action
+  highlightFiltered() {
+    this.filteredEmployees.forEach((employee) => {
+      set(employee, 'isHighlighted', true);
+    });
   }
 }

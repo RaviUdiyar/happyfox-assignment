@@ -3,6 +3,7 @@
     {{if (gt @model.children.length 0) 'employee-tree-children'}}
     {{if @isRootNode 'root--node'}}
     cursor-pointer
+    {{if @model.isHighlighted "highlight"}}
     "
   data-employee-id={{@model.id}}
   {{on "dragstart" (fn this.onDragStart @model)}}

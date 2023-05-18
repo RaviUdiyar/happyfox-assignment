@@ -5,7 +5,7 @@
     class="search border border-grey p-2 mb-2"
     placeholder="Search"
     value={{this.searchTerm}}
-    {{on "input" @filterEmployeesOnSearchTerm}}
+    {{on "input" (pipe (pick "target.value") @filterEmployeesOnSearchTerm)}}
   />
   <select
     aria-label="filter employees"
@@ -13,7 +13,7 @@
     class="border border-grey p-2 mb-2 mt-2"
     {{on "change" (pipe (pick "target.value") @filterEmployeesOnTeam)}}
   >
-    <option value="">All</option>
+    <option value="all">All</option>
     {{#each @allTeams as |team|}}
       <option value={{@team}} >{{team}}</option>
     {{/each}}

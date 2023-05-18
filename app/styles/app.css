@@ -33,6 +33,10 @@
   position: relative;
 }
 
+.employee-tree-node.highlight {
+  background-color: rgb(250 204 21);
+}
+
 .employee-tree-line {
   height: 2em;
   width: 1px;
