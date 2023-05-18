@@ -22,12 +22,11 @@ export default class ApplicationController extends Controller {
 
   @action
   applyFilter(employee) {
+    let searchTerm = this.searchTerm.toLowerCase();
     return (
-      employee.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      employee.designation
-        .toLowerCase()
-        .includes(this.searchTerm.toLowerCase()) ||
-      employee.team.toLowerCase().includes(this.searchTerm.toLowerCase())
+      employee.name?.toLowerCase().includes(searchTerm) ||
+      employee.designation?.toLowerCase().includes(searchTerm) ||
+      employee.team?.toLowerCase().includes(searchTerm)
     );
   }
 
