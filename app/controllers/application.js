@@ -1,8 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { isBlank } from '@ember/utils';
+import { isBlank, isPresent, isEmpty } from '@ember/utils';
 import { action, set } from '@ember/object';
-import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
@@ -15,7 +14,16 @@ export default class ApplicationController extends Controller {
   employees = [];
 
   @tracked
+  searchTeam = 'all';
+
+  @tracked
+  searchTerm = '';
+
+  @tracked
   filteredEmployees = this.model;
+
+  @tracked
+  filteredEmployeesOnTeam;
 
   @tracked
   employeeTree = this.buildEmployeeTree(this.model);
@@ -43,27 +51,35 @@ export default class ApplicationController extends Controller {
 
   @action
   filterEmployeesOnSearchTerm(value) {
-    this.resetHighlight();
-    if (isBlank(value)) {
+    this.searchTerm = value;
+    if (
+      isBlank(value) &&
+      (this.searchTeam === 'all' || this.searchTeam === '')
+    ) {
       this.filteredEmployees = this.model;
     } else {
-      this.filteredEmployees = this.model.filter((employee) =>
-        this.applyFilter(employee, value)
-      );
-      this.highlightFiltered();
+      this.filteredEmployees = (
+        this.filteredEmployeesOnTeam || this.model
+      ).filter((employee) => this.applyFilter(employee, value));
     }
   }
 
   @action
   filterEmployeesOnTeam(value) {
     this.resetHighlight();
+    this.searchTeam = value;
     if (value === '' || value === 'all') {
       this.filteredEmployees = this.model;
+      this.filteredEmployeesOnTeam = null;
     } else {
       this.filteredEmployees = this.model.filter((employee) => {
         return employee.team === value;
       });
+      this.filteredEmployeesOnTeam = this.filteredEmployees;
       this.highlightFiltered();
+    }
+    if (isPresent(this.searchTerm)) {
+      this.filterEmployeesOnSearchTerm(this.searchTerm);
     }
     // this.employeeTree = this.buildEmployeeTree(this.filteredEmployees);
   }
